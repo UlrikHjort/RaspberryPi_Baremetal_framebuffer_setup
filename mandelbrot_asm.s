@@ -28,7 +28,33 @@
 	.text
 		.global draw_mandel_brot_asm
 		.align 2
+/******************************************************************
+    The algorithm:
+	
+    const int max_iter = 1000;
 
+    for (unsigned int py = 0; py < HEIGHT; py++) {
+        for (unsigned int px = 0; px < WIDTH; px++) {
+
+            double x0 = xmin + (xmax - xmin) * px / WIDTH;
+            double y0 = ymin + (ymax - ymin) * py / HEIGHT;
+
+            double x = 0.0, y = 0.0;
+            int iter = 0;
+
+            while (x*x + y*y <= 4.0 && iter < max_iter) {
+                double xtemp = x*x - y*y + x0;
+                y = 2*x*y + y0;
+                x = xtemp;
+                iter++;
+            }
+
+            uint32_t color = iter < 1000 ? WHITE : BLACK
+            fb_putpixel(fb, px, py, color);
+        }
+    }
+
+********************************************************/
 
 draw_mandel_brot_asm:
 	str lr,[sp,#-16]! 
